@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  springboot-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9090:8080"  # Map host port 9090 to container port 8080
+    env_file:
+      - .env  # Include the .env file for environment variables
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/stage # Reference from .env
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}  # Reference from .env
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}  # Reference from .env
+      TRAINING_MANAGEMENT_APP_JWT_SECRET: ${TRAINING_MANAGEMENT_APP_JWT_SECRET}
+      TRAINING_MANAGEMENT_APP_JWT_COOKIE_NAME: ${TRAINING_MANAGEMENT_APP_JWT_COOKIE_NAME}
+    depends_on:
+      - db  # Ensure the database starts before the app
+
+  db:
+    container_name: db
+    image: mysql:8.0.36  # Specify the desired MySQL version
+    volumes:
+      - C:/Users/dell/Desktop/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}  # Reference from .env
+      MYSQL_DATABASE: stage  # Optionally create a database
+    ports:
+      - "3307:3306"  # Map host port 3306 to container port 3306
+
+  frontend:
+    build:
+      context: ../../../../React-App/stage-frontend  # Update this path to the frontend project directory
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"  # Map host port 5173 to container port 5173 (default for Vite)
+    depends_on:
+      - springboot-app

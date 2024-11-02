@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Dockerfile/Dockerfile.iml" filepath="$PROJECT_DIR$/Dockerfile/Dockerfile.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Training_management (2) (2).iml" filepath="$PROJECT_DIR$/.idea/Training_management (2) (2).iml" />
     </modules>
   </component>
